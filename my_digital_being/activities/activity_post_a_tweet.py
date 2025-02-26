@@ -30,7 +30,7 @@ class PostTweetActivity(ActivityBase):
         self.composio_action = "TWITTER_CREATION_OF_A_POST"
         # If you know your Twitter username, you can embed it in the link
         # or fetch it dynamically. Otherwise, substitute accordingly:
-        self.twitter_username = "YourUserName"
+        self.twitter_username = "RedBeanWay"
 
     async def execute(self, shared_data) -> ActivityResult:
         try:

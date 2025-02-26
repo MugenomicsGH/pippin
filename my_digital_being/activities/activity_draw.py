@@ -84,9 +84,9 @@ class DrawActivity(ActivityBase):
 
         # Base prompts for different moods
         mood_prompts = {
-            "happy": "a sunny landscape with vibrant colors",
-            "neutral": "a peaceful scene with balanced composition",
-            "sad": "a rainy day with muted colors",
+            "happy": "a traditional japanese watercolor painting of a sunny landscape with vibrant colors",
+            "neutral": "a traditional japanese watercolor painting of a peaceful scene with balanced composition",
+            "sad": "a traditional japanese watercolor painting of a rainy day with muted colors",
         }
 
         # Get base prompt from mood
