@@ -1,0 +1,27 @@
+# Core dependencies - high level without pinned versions
+composio-openai
+openai
+litellm
+google-genai
+
+# Websocket server support
+websockets
+
+# Env file loading
+python-dotenv
+
+# Replit environment, if needed
+replit
+
+# For Twitter OAuth and HTTP requests
+requests
+requests_oauthlib
+aiohttp
+
+# Data processing
+numpy
+pillow
+
+# Testing
+pytest
+pytest-asyncio 

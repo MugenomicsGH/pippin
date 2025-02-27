@@ -1,6 +1,7 @@
 import logging
 from typing import Dict, Any, List
 from datetime import datetime, timedelta
+import os
 
 from framework.activity_decorator import activity, ActivityBase, ActivityResult
 from framework.api_management import api_manager
@@ -209,14 +210,11 @@ class AnalyzeNewCommitsActivity(ActivityBase):
                 f"Listing commits from owner='{self.github_owner}', repo='{self.github_repo}', "
                 f"branch='{self.github_branch}' using action='{self.composio_action}'"
             )
+            repo_url = f"https://github.com/{self.github_owner}/{self.github_repo}.git"
             response = composio_manager._toolset.execute_action(
                 action=self.composio_action,
-                params={
-                    "owner": self.github_owner,
-                    "repo": self.github_repo,
-                    "sha": self.github_branch,
-                },
-                entity_id="MyDigitalBeing",
+                params={"repo_url": repo_url},
+                entity_id=os.environ.get("TWITTER_USERNAME"),
             )
 
             # unify "successfull"/"successful"/"success" -> boolean

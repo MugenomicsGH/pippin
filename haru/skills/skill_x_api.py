@@ -26,7 +26,7 @@ class XAPISkill:
         self.rate_limit = config.get("rate_limit", 100)
         self.cooldown_period = config.get("cooldown_period", 300)
         self.posts_count = 0
-        self.twitter_username = config.get("twitter_username", "YourUserName")  # Get from config
+        self.twitter_username = os.environ.get("TWITTER_USERNAME", config.get("twitter_username", "YourUserName"))
         
         # Create storage directory if it doesn't exist
         # Get the project root directory (2 levels up from this file)
@@ -80,7 +80,7 @@ class XAPISkill:
                         params={
                             "media": str(local_path)  # Just pass the file path as a string
                         },
-                        entity_id="MyDigitalBeing"
+                        entity_id="RedBeanWay"
                     )
                 
                 if upload_response.get("successful"):
@@ -136,7 +136,7 @@ class XAPISkill:
             response = composio_manager._toolset.execute_action(
                 action=self.post_action,
                 params=params,
-                entity_id="MyDigitalBeing",
+                entity_id="RedBeanWay",
             )
 
             # The actual success key is "successfull" (with 2 Ls)

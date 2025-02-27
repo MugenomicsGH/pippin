@@ -1,0 +1,79 @@
+{
+  "activity_requirements": {
+    "PostTweetActivity": {
+      "required_skills": [
+        "twitter_posting"
+      ],
+      "min_memory_space": 100
+    },
+    "FetchNewsActivity": {
+      "required_skills": [
+        "web_scraping"
+      ],
+      "min_memory_space": 500
+    },
+    "DrawActivity": {
+      "required_skills": [
+        "image_generation"
+      ],
+      "min_memory_space": 200
+    },
+    "AnalyzeDailyActivity": {
+      "required_skills": [
+        "openai_chat"
+      ],
+      "min_memory_space": 100
+    },
+    "SuggestNewActivities": {
+      "required_skills": [
+        "openai_chat"
+      ],
+      "min_memory_space": 200
+    },
+    "BuildOrUpdateActivity": {
+      "required_skills": [
+        "openai_chat"
+      ],
+      "min_memory_space": 300
+    }
+  },
+  "activities_config": {
+    "AnalyzeDailyActivity": {
+      "enabled": true
+    },
+    "AnalyzeNewCommitsActivity": {
+      "enabled": false
+    },
+    "BuildOrUpdateActivity": {
+      "enabled": false
+    },
+    "DailyThoughtActivity": {
+      "enabled": false
+    },
+    "DrawActivity": {
+      "enabled": false
+    },
+    "EvaluateActivity": {
+      "enabled": false
+    },
+    "FetchNewsActivity": {
+      "enabled": false
+    },
+    "NapActivity": {
+      "enabled": true
+    },
+    "PostTweetActivity": {
+      "enabled": true
+    },
+    "PostRecentMemoriesTweetActivity": {
+      "enabled": false
+    },
+    "SuggestNewActivities": {
+      "enabled": true
+    },
+    "TestActivity": {
+      "enabled": false
+    }
+  },
+  "global_constraints": ""
+}

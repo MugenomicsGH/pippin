@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 class ComposioManager:
     def __init__(self):
         self._toolset = None
-        self._entity_id = "MyDigitalBeing"
+        self._entity_id = os.environ.get("TWITTER_USERNAME", "RedBeanWay")  # Default to RedBeanWay for backward compatibility
         self._oauth_connections: Dict[str, Dict[str, Any]] = {}
         self._available_apps: Dict[str, Any] = {}
 
@@ -68,16 +68,23 @@ class ComposioManager:
     def _initialize_toolset(self):
         try:
             api_key = os.environ.get("COMPOSIO_API_KEY")
+            logger.info("Checking for COMPOSIO_API_KEY in environment...")
             if not api_key:
                 logger.error("No COMPOSIO_API_KEY in environment")
                 return
-            self._toolset = ComposioToolSet(api_key=api_key, entity_id=self._entity_id)
-            logger.info("Created ComposioToolSet instance")
+            logger.info("Found COMPOSIO_API_KEY, initializing toolset...")
+
+            # Initialize without entity_id since that works
+            self._toolset = ComposioToolSet(api_key=api_key)
+            logger.info("Successfully created ComposioToolSet")
 
             # Load the list of apps
+            logger.info("Attempting to load list of apps...")
             tools = self._toolset.get_tools(actions=["COMPOSIO_LIST_APPS"])
+            logger.info("Got tools, executing COMPOSIO_LIST_APPS action...")
             result = self._toolset.execute_action(
-                action="COMPOSIO_LIST_APPS", params={}, entity_id=self._entity_id
+                action="COMPOSIO_LIST_APPS",
+                params={}  # Remove entity_id since it's not needed
             )
             success_value = result.get("success") or result.get("successfull")
             if success_value:
