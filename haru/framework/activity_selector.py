@@ -32,7 +32,7 @@ class ActivitySelector:
         That loader has the loaded_activities dictionary (module_name -> activity_class).
         """
         self.activity_loader = loader
-        logger.info("Activity loader set in selector")
+        logger.debug("Activity loader set in selector")
 
     def select_next_activity(self):
         """
@@ -51,7 +51,7 @@ class ActivitySelector:
         available_activities = self._get_available_activities()
         if not available_activities:
             next_available = self.get_next_available_times()
-            logger.info(
+            logger.debug(
                 f"No activities available at this time. Next available activities: {next_available}"
             )
             return None
@@ -63,13 +63,13 @@ class ActivitySelector:
             if self._check_energy_requirements(
                 activity
             ) and self._check_activity_requirements(activity_name):
-                logger.info(f"Activity {activity_name} is suitable for execution.")
+                logger.debug(f"Activity {activity_name} is suitable for execution.")
                 suitable_activities.append(activity)
             else:
-                logger.info(f"Activity {activity_name} does not meet requirements.")
+                logger.debug(f"Activity {activity_name} does not meet requirements.")
 
         if not suitable_activities:
-            logger.info("No activities suitable for current state.")
+            logger.debug("No activities suitable for current state.")
             return None
 
         # Step 3: personality-based selection
@@ -81,7 +81,7 @@ class ActivitySelector:
 
         if selected_activity:
             chosen_name = selected_activity.__class__.__name__
-            logger.info(f"Selected activity: {chosen_name}")
+            logger.debug(f"Selected activity: {chosen_name}")
             # Step 4: record the time we picked it
             self.last_activity_times[chosen_name] = datetime.now()
 
@@ -152,7 +152,7 @@ class ActivitySelector:
             # 1) skip if disabled
             if base_name in activities_config:
                 if activities_config[base_name].get("enabled", True) is False:
-                    logger.info(f"Skipping disabled activity: {base_name}")
+                    logger.debug(f"Skipping disabled activity: {base_name}")
                     continue
 
             # 2) check if it's on cooldown
@@ -161,7 +161,7 @@ class ActivitySelector:
             if last_time:
                 time_since_last = (current_time - last_time).total_seconds()
                 if time_since_last < cooldown:
-                    logger.info(
+                    logger.debug(
                         f"{base_name} still on cooldown for {cooldown - time_since_last:.1f}s more."
                     )
                     continue
@@ -169,7 +169,7 @@ class ActivitySelector:
             # If we get here, the activity is enabled & not on cooldown
             try:
                 instance = activity_class()
-                logger.info(f"Created instance of {base_name} successfully.")
+                logger.debug(f"Created instance of {base_name} successfully.")
                 available.append(instance)
             except Exception as e:
                 logger.error(
@@ -198,7 +198,7 @@ class ActivitySelector:
         has_energy = current_energy >= required_energy
 
         if not has_energy:
-            logger.info(
+            logger.debug(
                 f"Insufficient energy for {activity.__class__.__name__} "
                 f"(required={required_energy}, current={current_energy})."
             )

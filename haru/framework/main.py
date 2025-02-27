@@ -56,13 +56,13 @@ class DigitalBeing:
 
         # Load configurations
         self.configs = self._load_configs()
-        logger.info("Configurations loaded")
+        logger.debug("Configurations loaded")
 
         # Register API key requirements from skills_config
         skills_config = self.configs.get("skills_config", {})
         from framework.api_management import api_manager  # Avoid top-level import loops
 
-        logger.info("Registering API key requirements for skills...")
+        logger.debug("Registering API key requirements for skills...")
         for skill_name, maybe_skill_dict in skills_config.items():
             # SKIP STR KEYS LIKE 'default_llm_skill'
             if not isinstance(maybe_skill_dict, dict):
@@ -75,7 +75,7 @@ class DigitalBeing:
                 required_keys = maybe_skill_dict.get("required_api_keys", [])
                 if required_keys:
                     api_manager.register_required_keys(skill_name, required_keys)
-                    logger.info(
+                    logger.debug(
                         f"Registered API key requirements for {skill_name}: {required_keys}"
                     )
 
@@ -111,22 +111,32 @@ class DigitalBeing:
             while True:
                 # If not configured, skip picking an activity
                 if not self.is_configured():
-                    logger.warning(
-                        "Digital Being NOT configured. Skipping activity execution."
-                    )
-                    await asyncio.sleep(3)
+                    logger.warning("Digital Being NOT configured. Skipping activity execution.")
+                    await asyncio.sleep(60)  # Changed to 60 seconds
                     continue
 
                 current_activity = self.activity_selector.select_next_activity()
+                activity_summary = "No activity selected"
+                
                 if current_activity:
-                    logger.info(
-                        f"Selected activity: {current_activity.__class__.__name__}"
-                    )
-                    await self.execute_activity(current_activity)
+                    activity_name = current_activity.__class__.__name__
+                    logger.debug(f"Selected activity: {activity_name}")
+                    result = await self.execute_activity(current_activity)
+                    if result.success:
+                        activity_summary = f"Successfully executed: {activity_name}"
+                    else:
+                        activity_summary = f"Failed to execute: {activity_name} - {result.error}"
+                else:
+                    activity_summary = "No activity selected this cycle"
 
                 self.state.update()
                 self.memory.persist()
-                await asyncio.sleep(1)  # short delay to avoid busy-waiting
+                
+                # Log a summary of this cycle's actions
+                logger.info(f"Cycle summary: {activity_summary}")
+                
+                # Sleep for 60 seconds before the next cycle
+                await asyncio.sleep(60)
 
         except KeyboardInterrupt:
             logger.info("Shutting down digital being...")
@@ -135,7 +145,7 @@ class DigitalBeing:
     async def execute_activity(self, activity) -> ActivityResult:
         """Execute a selected activity."""
         try:
-            logger.info(
+            logger.debug(
                 f"Starting execution of activity: {activity.__class__.__name__}"
             )
             result = await activity.execute(self.shared_data)
@@ -159,7 +169,7 @@ class DigitalBeing:
             self.memory.store_activity_result(activity_record)
 
             if result.success:
-                logger.info(f"Successfully executed: {activity.__class__.__name__}")
+                logger.debug(f"Successfully executed: {activity.__class__.__name__}")
                 self.state.record_activity_completion()
             else:
                 logger.warning(

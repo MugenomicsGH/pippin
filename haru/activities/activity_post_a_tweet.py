@@ -203,12 +203,14 @@ class PostTweetActivity(ActivityBase):
             f"{origin}\n"
             f"Writing Style: {writing_style}\n"
             f"Instructions: {instructions}\n"
+            f"Here are your most recent tweets, for reference:\n"
+            f"{last_tweets_str}\n\n"
             f"Here is a selection of example posts in your writing style:\n"
             f"{example_posts}\n\n"
             f"Your current mood is:\n"
             f"{personality_str}\n\n"
             f"Write a new short tweet (under 280 chars) that reflects your current mood and backstory. Today, you feel particularly drawn to muse about '{random_topic}'. Keep it interesting and creative. Write an inspirational quote, pose a riddle, write a haiku, make a completely nonsensical observation that sounds like a meme, or anything else that's interesting to you, but make sure the tweet is about the aforementioned topic. Stay in character.\n"
-            f"Avoid hashtags, emojis, or repeated phrases.\n"
+            f"IMPORTANT: DO NOT USE HASHTAGS OR EMOJIS.\n"
         )
 
     async def _generate_image_prompt(self, tweet_text: str, personality_data: Dict[str, Any], origin: str) -> str:
